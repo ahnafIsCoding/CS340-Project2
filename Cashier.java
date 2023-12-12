@@ -1,4 +1,7 @@
-import java.util.Vector;
+/* Cashier class
+ * Last Modified Time: 12/12/2023 4 PM
+ * Author: Ahnaf Ahmed
+ * */
 
 public class Cashier implements Runnable {
 
@@ -40,50 +43,51 @@ public class Cashier implements Runnable {
    public void start() {
      thread.start();
    } // start
-
-
-// Main.Mutex.acquire(); // P(Mutex)
-// boolean allCustomerServed = Customer.totalCustomer <= 0;
-// Main.Mutex.release(); // V(Mutex)
+   
    
    @Override
    public void run() {
       
-      msg("Started shift");
+      msg("started their shift");
 
       try {
       
          while(true) {
             
-
-            msg("Waiting for customer");
+            msg("waiting for customer");
             Main.CustomerSem.acquire(); // P(Customer)
+            
+            // leave if no customer remaining
             Main.Mutex.acquire(); // P(Mutex)
             if (Customer.totalCustomer <= 0) {
                Main.Mutex.release(); // V(Mutex)
                break;
-            }
+            } // if
             Main.Mutex.release(); // V(Mutex)
             
-            msg("Helping the next customer");
-            thread.sleep(1000);
-            msg("Checkout complete");
+            msg("helping the next customer");
+            Thread.sleep(1000);
+            msg("checkout complete");
+            
+            // cashier became available
             Main.CashierSem.release(); // V(Cashier)
-           
-         }
+         } // while
          
-         msg("All customers left");
+         msg("no more customer left to help");
          
          Main.Mutex.acquire(); // P(Mutex)
          totalCashier--;
-         System.out.println("Cashier left: "+totalCashier);
+         if(totalCashier <= 0) {
+            Main.PetCustomerSem.release();
+//            Main.CashierAdoptionClerkSem.acquire();
+            Main.CashierAdoptionClerkSem.release(); // V(CashierAdoptionClerkSem)
+         } // if
          Main.Mutex.release(); // V(Mutex)
-         
-         msg("Left");
+
+         msg("left the store");
 
       } catch (Exception e) {
-            
-      }
-   }
-
-}
+          e.printStackTrace();
+      } // catch
+   } // run
+} // class Cashier
