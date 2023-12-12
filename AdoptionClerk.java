@@ -81,7 +81,7 @@ public class AdoptionClerk implements Runnable {
             } // if
             Main.Mutex.release(); // V(Mutex)
             
-            msg("waiting for customer");
+            this.msg("waiting for customer");
             Main.PetCustomerSem.acquire(); // P(PetCustomerSem)
             
             // break if no customer remaining
@@ -104,6 +104,8 @@ public class AdoptionClerk implements Runnable {
          
          // wait for all cashier to leave
          Main.CashierAdoptionClerkSem.acquire(); // P(CashierAdoptionClerkSem)
+         this.msg("closing the store");
+         Thread.sleep(1000);
          this.msg("left the store");
       } catch (Exception e) {
          e.printStackTrace();

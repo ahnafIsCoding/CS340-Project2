@@ -48,13 +48,13 @@ public class Cashier implements Runnable {
    @Override
    public void run() {
       
-      msg("started their shift");
+      this.msg("started their shift");
 
       try {
       
          while(true) {
             
-            msg("waiting for customer");
+            this.msg("waiting for customer");
             Main.CustomerSem.acquire(); // P(Customer)
             
             // leave if no customer remaining
@@ -65,15 +65,15 @@ public class Cashier implements Runnable {
             } // if
             Main.Mutex.release(); // V(Mutex)
             
-            msg("helping the next customer");
+            this.msg("helping the next customer");
             Thread.sleep(1000);
-            msg("checkout complete");
+            this.msg("checkout complete");
             
             // cashier became available
             Main.CashierSem.release(); // V(Cashier)
          } // while
          
-         msg("no more customer left to help");
+         this.msg("no more customer left to help");
          
          Main.Mutex.acquire(); // P(Mutex)
          totalCashier--;
@@ -84,7 +84,7 @@ public class Cashier implements Runnable {
          } // if
          Main.Mutex.release(); // V(Mutex)
 
-         msg("left the store");
+         this.msg("left the store");
 
       } catch (Exception e) {
           e.printStackTrace();

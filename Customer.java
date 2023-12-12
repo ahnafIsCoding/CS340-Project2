@@ -124,10 +124,10 @@ public class Customer implements Runnable {
          this.msg("browsing aisles");
          simulateSleep();
          
-         msg("waiting for cashier");
+         this.msg("waiting for cashier");
          Main.CashierSem.acquire(); // P(Cashier)
          
-         msg("going to the cahsier");
+         this.msg("going to the cahsier");
          Main.CustomerSem.release(); // V(Customer)
          simulateSleep();
       } catch (InterruptedException e) {
@@ -148,7 +148,7 @@ public class Customer implements Runnable {
          Main.Mutex.release(); // V(Mutex)
          
          // waiting in line
-         this.msg("Waiting for the visiting area");
+         this.msg("waiting for the visiting area");
          
 //         Main.AdoptionClerkSem.acquire(); // P(AdoptionClerkSem)
          
