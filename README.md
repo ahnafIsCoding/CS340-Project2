@@ -1,4 +1,4 @@
-# CS340 Operating Systems Principles
+# CSCI 340 Operating Systems Principles
 
 ## Project 2: Pet Store Adoption Event with Semaphores
 
